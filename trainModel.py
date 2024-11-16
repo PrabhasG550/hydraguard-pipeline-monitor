@@ -4,10 +4,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 import joblib
 
-# Load your data 
+# loading the data
 data = pd.read_csv('Fearless_709H-10_31-11_07.csv')
 
-# Example of feature engineering based on your dataset
+
 data['Rate_of_Change'] = data['Inj Gas Meter Volume Instantaneous'].diff()
 data['Valve_Effectiveness'] = data['Inj Gas Meter Volume Instantaneous'] / data['Inj Gas Valve Percent Open']
 data['Rolling_Avg'] = data['Inj Gas Meter Volume Instantaneous'].rolling(window=3).mean()
@@ -22,11 +22,11 @@ for i in range(1,len(data)):
    data['Hydrate_Status'].iloc[i]=hydrateLabel(data.iloc[i],data.iloc[i-1])
 data = data.dropna()  
 
-# Define features (X) and target (y)
+# Define (X) and target (y)
 X = data[['Inj Gas Meter Volume Instantaneous', 'Rate_of_Change', 'Valve_Effectiveness', 'Rolling_Avg']]
 y = data['Hydrate_Status']  # Assume this is the column indicating hydrate status (1 = hydrate, 0 = no hydrate)
 
-# Split the data into training and testing sets
+# training and testing sets
 xTrain, xTest, yTrain, yTest = train_test_split(X, y, test_size=0.2, random_state=42)
 
 # Initialize and train the Random Forest model
