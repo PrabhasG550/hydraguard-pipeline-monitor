@@ -1,4 +1,6 @@
 """
+#POTENTIAL NEURAL NETWORK
+
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
@@ -117,40 +119,39 @@ def generateHydrate(data):
     data['Hydrate_Status']=0
     for i in range(1,len(data)):
         data['Hydrate_Status'].iloc[i]=determineHydrate(data.iloc[i],data.iloc[i-1])
-    #data = data.dropna()
     return data
 
 def train():
-    # Load your data 
+    # loading the data
     originalData = pd.read_csv('Valiant_505H-09_22-09_30.csv')
-    # fix gaps in data
+    # fill in null values
     originalData = originalData.fillna(method='ffill').fillna(method='bfill')
 
     originalData['Rate_of_Change'] = originalData['Inj Gas Meter Volume Instantaneous'].diff()
     originalData['Valve_Effectiveness'] = originalData['Inj Gas Meter Volume Instantaneous'] / originalData['Inj Gas Valve Percent Open']
     originalData['Rolling_Avg'] = originalData['Inj Gas Meter Volume Instantaneous'].rolling(window=3).mean()
 
-    # generate dataframe from original data with hydrate values
     data = generateHydrate(originalData)
 
-    # Define features (X) and target (y)
+    # X and Y values
     X = data[['Inj Gas Meter Volume Instantaneous', 'Rate_of_Change', 'Valve_Effectiveness', 'Rolling_Avg']]
-    y = data['Hydrate_Status']  # Assume this is the column indicating hydrate status (1 = hydrate, 0 = no hydrate)
+    y = data['Hydrate_Status']  
 
-    # Split the data into training and testing sets
+    
     xTrain, xTest, yTrain, yTest = train_test_split(X, y, test_size=5, random_state=42)
 
-    # Initialize and train the Random Forest model
+    # Random Forest model
     rf = RandomForestClassifier(n_estimators=100, random_state=42)
     rf.fit(xTrain, yTrain)
 
-    # Evaluate the model (optional)
+    #Evaluate
     y_prob = rf.predict_proba(xTest)[:, 1]
     print('PROB:\n', y_prob)
     print(xTest)
 
-    # Save the trained model using joblib
+    # use joblib to save model
     joblib.dump(rf, 'hydrate_detection.joblib')
     print("Model saved successfully!")
 
+# uncomment below code to run the training model.
 #train()

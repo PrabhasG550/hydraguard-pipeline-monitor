@@ -1,4 +1,6 @@
 """
+#POTENTIAL NEURAL NETWORK TEST
+
 import pandas as pd
 from modelAlgo import determineHydrate, genXYSequences
 from tensorflow.keras.models import load_model
@@ -61,21 +63,13 @@ def testHydrate(filename):
     model = joblib.load('hydrate_detection.joblib')
     hydrateList = []
 
-    # replace newData with desired data file
     newData = pd.read_csv(filename)
     newData = newData.fillna(method='ffill').fillna(method='bfill')
 
     for i in range(0,len(newData)):
         hydrateStatus = determineHydrate(newData.iloc[i],newData.iloc[i-1])
         if hydrateStatus == 1:
-            print('HYDRATE DETECTED AT ROW', i+2, ':', newData.iloc[i])
             hydrateList.append(1)
         else:
-            print('no hydrate at', newData.iloc[i])
-            hydrateList.append(0)
-
-    print(hydrateList)
-    
+            hydrateList.append(0)    
     return hydrateList
-
-testHydrate('Bold_744H-10_31-11_07.csv')
