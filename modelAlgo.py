@@ -138,7 +138,7 @@ def train():
     y = data['Hydrate_Status']  # Assume this is the column indicating hydrate status (1 = hydrate, 0 = no hydrate)
 
     # Split the data into training and testing sets
-    xTrain, xTest, yTrain, yTest = train_test_split(X, y, test_size=0.2, random_state=42)
+    xTrain, xTest, yTrain, yTest = train_test_split(X, y, test_size=5, random_state=42)
 
     # Initialize and train the Random Forest model
     rf = RandomForestClassifier(n_estimators=100, random_state=42)
@@ -147,9 +147,10 @@ def train():
     # Evaluate the model (optional)
     y_prob = rf.predict_proba(xTest)[:, 1]
     print('PROB:\n', y_prob)
+    print(xTest)
 
     # Save the trained model using joblib
     joblib.dump(rf, 'hydrate_detection.joblib')
     print("Model saved successfully!")
 
-train()
+#train()

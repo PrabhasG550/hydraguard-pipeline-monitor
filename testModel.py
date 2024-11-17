@@ -73,5 +73,9 @@ def testHydrate(filename):
         else:
             print('no hydrate at', newData.iloc[i])
             hydrateList.append(0)
+
+    print(hydrateList)
     
     return hydrateList
+
+testHydrate('Bold_744H-10_31-11_07.csv')
