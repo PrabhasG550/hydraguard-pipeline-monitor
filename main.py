@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from streamlit.components.v1 import html
+from testModel import getHydrates
 
 # Set page configuration
 st.set_page_config(
@@ -81,7 +82,9 @@ with tab1:
         # Plot a graph for the selected pipe's data
         st.write(f"### Graph for '{selectpipe}'")
         st.line_chart(selected_pipe_data["data"])  # This will plot the entire dataframe
-        
+
+        st.write(f"### Hydrate Probability Data for '{selectpipe}'")
+
 
     else:
         st.info("No pipes added yet. Please add a new pipe in the 'Add New Pipe' tab.")
