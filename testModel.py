@@ -23,7 +23,7 @@ def getHydrates():
     newData = newData.drop(columns=['Time'])
 
     # Handle missing values (NaN) by filling or dropping them
-    newData = newData.fillna(0)  # Or use any other strategy like .dropna() or interpolation
+    newData = newData.fillna(method='ffill').fillna(method='bfill')
 
     # Loop through the rows to check for hydrate detection
     for i in range(1, len(newData)):
@@ -44,3 +44,5 @@ def getHydrates():
     print(df)
 
     return probs
+
+getHydrates()
