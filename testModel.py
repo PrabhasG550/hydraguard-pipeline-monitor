@@ -2,7 +2,7 @@ import joblib
 import pandas as pd
 import sklearn
 
-from trainModel import determineHydrate
+from modelAlgo import determineHydrate
 
 model = joblib.load('hydrate_detection.joblib')
 
