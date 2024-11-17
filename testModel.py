@@ -1,3 +1,4 @@
+"""
 import pandas as pd
 from modelAlgo import determineHydrate, genXYSequences
 from tensorflow.keras.models import load_model
@@ -41,8 +42,36 @@ def getHydrates(filename):
     print(newData)
     print(probs)
 
-    print(df)
+    #print(df)
 
     return probs
 
-#getHydrates('Bold_744H-10_31-11_07.csv')
+getHydrates('Bold_744H-10_31-11_07.csv')
+
+"""
+
+# tests new data against model to see if there are hydrates
+
+import joblib
+import pandas as pd
+
+from modelAlgo import determineHydrate
+
+def testHydrate(filename):
+    model = joblib.load('hydrate_detection.joblib')
+    hydrateList = []
+
+    # replace newData with desired data file
+    newData = pd.read_csv(filename)
+    newData = newData.fillna(method='ffill').fillna(method='bfill')
+
+    for i in range(0,len(newData)):
+        hydrateStatus = determineHydrate(newData.iloc[i],newData.iloc[i-1])
+        if hydrateStatus == 1:
+            print('HYDRATE DETECTED AT ROW', i+2, ':', newData.iloc[i])
+            hydrateList.append(1)
+        else:
+            print('no hydrate at', newData.iloc[i])
+            hydrateList.append(0)
+    
+    return hydrateList
