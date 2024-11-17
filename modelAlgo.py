@@ -20,11 +20,8 @@ def generateHydrate(data):
 
 def genXYSequences(filename):
     # Load training data
-    originalData = pd.read_csv(filename)
-
-    #if original value is null, takes next available value
-    if pd.isinstance(originalData['Inj Gas Valve Percent Open'].iloc[0]):
-        originalData['Inj Gas Valve Percent Open']= originalData['Inj Gas Valve Percent Open'].fillna(method='bfill')
+    df = pd.read_csv(filename)
+    originalData = df.fillna(method='ffill').fillna(method='bfill')
 
     # Forward fill 'Inj Gas Valve Percent Open' if there's a missing value
     originalData['Inj Gas Valve Percent Open'] = originalData['Inj Gas Valve Percent Open'].fillna(method='ffill')
@@ -84,13 +81,6 @@ def train():
     hydrate_probabilities = model.predict(xTest)
     print('HYDRATE PROBABILITIES:\n')
     print(hydrate_probabilities)
-
-    """
-    # Display probabilities for each row
-    result_df = pd.DataFrame(np.reshape(xTest, (xTest.shape[0], -1)))  
-    result_df['Hydrate_Probability'] = hydrate_probabilities
-    print(result_df)
-    """
 
     # Save the trained model
     model.save('hydrate_detection.h5')

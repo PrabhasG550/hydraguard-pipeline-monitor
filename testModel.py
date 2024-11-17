@@ -1,29 +1,4 @@
-"""import joblib
 import pandas as pd
-import sklearn
-
-from modelAlgo import determineHydrate
-from tensorflow.keras.models import load_model
-
-model = load_model('hydrate_detection.h5')
-
-# replace newData with desired data file
-newData = pd.read_csv('Bold_744H-10_31-11_07.csv')
-
-for i in range(1,len(newData)):
-   hydrateStatus = determineHydrate(newData.iloc[i],newData.iloc[i-1])
-   if hydrateStatus == 1:
-      print('HYDRATE DETECTED AT ROW', i, ':', newData.iloc[i])
-
-probs = model.predict(newData)
-print(newData)
-print(probs)
-"""
-
-
-import joblib
-import pandas as pd
-import sklearn
 from modelAlgo import determineHydrate, genXYSequences
 from tensorflow.keras.models import load_model
 
@@ -31,7 +6,10 @@ from tensorflow.keras.models import load_model
 model = load_model('hydrate_detection.h5')
 
 # Replace with your desired data file
-newData = pd.read_csv('Bold_744H-10_31-11_07.csv')
+newData = pd.read_csv('Valiant_505H-09_22-09_30.csv')
+print('FILLNA\n')
+df = newData.fillna(method='ffill').fillna(method='bfill')
+#print(df)
 
 # Convert 'Time' column to datetime, then extract useful features (e.g., hour, day, etc.)
 newData['Time'] = pd.to_datetime(newData['Time'], errors='coerce')  # Convert to datetime, coercing errors to NaT
@@ -61,3 +39,5 @@ probs = model.predict(X)
 # Print the data and predictions
 print(newData)
 print(probs)
+
+print(df)
