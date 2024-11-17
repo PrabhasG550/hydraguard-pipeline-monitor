@@ -39,70 +39,6 @@ st.markdown(
 # Main Tab Layout
 tab1, tab2 = st.tabs(["Pipeline Overview", "Add New Pipe"])
 
-# --- Tab 1: Pipeline Overview ---
-with tab1:
-    st.header("🔔 Pipe Status and Hydrate Alerts")
-    
-    # Display table of all pipes and their hydration status
-    if st.session_state.pipes:
-        pipe_status_data = []
-        for pipe_name, pipe_data in st.session_state.pipes.items():
-            status_color = "red" if pipe_data["hydrate_status"] else "green"
-            pipe_status_data.append([pipe_name, f"<span style='color:{status_color}'>{'Hydrate Detected' if pipe_data['hydrate_status'] else 'No Issues'}</span>"])
-        
-        # Display dynamic table with color-coded statuses
-        df_status = pd.DataFrame(pipe_status_data, columns=["Pipe Name", "Hydration Status"])
-        st.write(df_status.to_html(escape=False), unsafe_allow_html=True)
-    
-    else:
-        st.info("No pipes added yet. Please add a new pipe in the 'Add New Pipe' tab.")
-
-    # If any alert is active, show the fullscreen blinking popup with dismiss button
-    if st.session_state.alert_active:
-        st.markdown(
-            """
-            <style>
-                @keyframes blink {
-                    0% {background-color: rgba(255, 0, 0, 0.9);}
-                    50% {background-color: rgba(255, 0, 0, 0.5);}
-                    100% {background-color: rgba(255, 0, 0, 0.9);}
-                }
-                .alert-popup {
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    animation: blink 1s infinite;
-                    color: white;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    justify-content: center;
-                    font-size: 1.5rem;
-                    text-align: center;
-                    z-index: 9999;
-                }
-                .alert-button {
-                    margin-top: 20px;
-                    padding: 10px 20px;
-                    font-size: 1rem;
-                    background: white;
-                    color: red;
-                    border: none;
-                    border-radius: 5px;
-                    cursor: pointer;
-                }
-            </style>
-            <div class="alert-popup">
-                ⚠️ **Hydrate Detected! Immediate Action Required!**  
-                <button class="alert-button" onclick="window.location.reload();">Dismiss Alert</button>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-        # Auto-playing alarm sound when hydrate detected
-        st.audio("https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg", format="audio/ogg", start_time=0)
 
 # --- Tab 2: Add New Pipe ---
 with tab2:
@@ -114,7 +50,8 @@ with tab2:
     # File uploader for uploading CSV data for the new pipe
     uploaded_file = st.file_uploader("Upload your data file (CSV)", type="csv")
     
-    if uploaded_file and new_pipe_name:
+    
+    if st.button("Submit Pipe") and uploaded_file and new_pipe_name:
         # Load and process the uploaded CSV file
         data = pd.read_csv(uploaded_file)
         data["Time"] = pd.to_datetime(data["Time"])  # Convert Time column to datetime
@@ -127,18 +64,87 @@ with tab2:
         }
         
         st.success(f"Pipe '{new_pipe_name}' added successfully!")
+
+# --- Tab 1: Pipeline Overview ---
+with tab1:
+    st.header("🔔 Pipe Status and Hydrate Alerts")
+    
+    selectpipe = []
+
+    # Display Drop Down Menu of all Pipes
+    if st.session_state.pipes:
+        selectpipe = st.selectbox("Select a Pipe", options=list(st.session_state.pipes.keys()))
         
-        # Display uploaded data and graphs for this new pipe
-        st.write(f"### Data for '{new_pipe_name}'")
-        st.dataframe(data)
+        # Get the data for the selected pipe
+        selected_pipe_data = st.session_state.pipes[selectpipe]
         
-        # Graph visualization of key metrics from uploaded data
-        st.write(f"### Key Metrics Visualization for '{new_pipe_name}'")
-        st.line_chart(data)
+        # Plot a graph for the selected pipe's data
+        st.write(f"### Graph for '{selectpipe}'")
+        st.line_chart(selected_pipe_data["data"])  # This will plot the entire dataframe
         
-        # Button to simulate hydrate detection for this specific pipe
-        if st.button(f"Simulate Hydrate Detection for '{new_pipe_name}'"):
-            toggle_hydrate(new_pipe_name)
+
+    else:
+        st.info("No pipes added yet. Please add a new pipe in the 'Add New Pipe' tab.")
+
+    # # Display uploaded data and graphs for this new pipe
+    # st.write(f"### Data for '{new_pipe_name}'")
+    # st.dataframe(data)
+    
+    # # Graph visualization of key metrics from uploaded data
+    # st.write(f"### Key Metrics Visualization for '{new_pipe_name}'")
+    # st.line_chart(data)
+    
+    # # Button to simulate hydrate detection for this specific pipe
+    # if st.button(f"Simulate Hydrate Detection for '{new_pipe_name}'"):
+    #     toggle_hydrate(new_pipe_name)
+
+
+    # # If any alert is active, show the fullscreen blinking popup with dismiss button
+    # if st.session_state.alert_active:
+    #     st.markdown(
+    #         """
+    #         <style>
+    #             @keyframes blink {
+    #                 0% {background-color: rgba(255, 0, 0, 0.9);}
+    #                 50% {background-color: rgba(255, 0, 0, 0.5);}
+    #                 100% {background-color: rgba(255, 0, 0, 0.9);}
+    #             }
+    #             .alert-popup {
+    #                 position: fixed;
+    #                 top: 0;
+    #                 left: 0;
+    #                 width: 100%;
+    #                 height: 100%;
+    #                 animation: blink 1s infinite;
+    #                 color: white;
+    #                 display: flex;
+    #                 flex-direction: column;
+    #                 align-items: center;
+    #                 justify-content: center;
+    #                 font-size: 1.5rem;
+    #                 text-align: center;
+    #                 z-index: 9999;
+    #             }
+    #             .alert-button {
+    #                 margin-top: 20px;
+    #                 padding: 10px 20px;
+    #                 font-size: 1rem;
+    #                 background: white;
+    #                 color: red;
+    #                 border: none;
+    #                 border-radius: 5px;
+    #                 cursor: pointer;
+    #             }
+    #         </style>
+    #         <div class="alert-popup">
+    #             ⚠️ **Hydrate Detected! Immediate Action Required!**  
+    #             <button class="alert-button" onclick="window.location.reload();">Dismiss Alert</button>
+    #         </div>
+    #         """,
+    #         unsafe_allow_html=True,
+    #     )
+
+        
 
 # Footer section with credits
 st.markdown(

@@ -6,6 +6,14 @@ from tensorflow.keras.layers import LSTM, Dense, Dropout
 import numpy as np
 import joblib
 
+import sys
+import io
+
+# Force stdout and stderr to use UTF-8 encoding
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
+
+
 def determineHydrate(row, prevRow):
     if prevRow is not None:
         if row['Inj Gas Meter Volume Instantaneous'] < prevRow['Inj Gas Meter Volume Instantaneous'] and row['Inj Gas Valve Percent Open'] >= prevRow['Inj Gas Valve Percent Open']:
