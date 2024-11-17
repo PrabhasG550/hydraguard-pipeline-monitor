@@ -2,12 +2,12 @@ import pandas as pd
 from modelAlgo import determineHydrate, genXYSequences
 from tensorflow.keras.models import load_model
 
-def getHydrates():
+def getHydrates(filename):
     # Load the model
     model = load_model('hydrate_detection.h5')
 
     # Replace with your desired data file
-    newData = pd.read_csv('Valiant_505H-09_22-09_30.csv')
+    newData = pd.read_csv(filename)
     print('FILLNA\n')
     df = newData.fillna(method='ffill').fillna(method='bfill')
     #print(df)
