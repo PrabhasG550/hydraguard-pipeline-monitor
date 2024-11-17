@@ -14,7 +14,7 @@ st.set_page_config(
 if "pipes" not in st.session_state:
     st.session_state.pipes = {}  
 
-st.title("🧊 Hydrate Detection Challenge")
+st.title("🧊 HydraGuard")
 st.markdown(
     """
     Welcome to the **Hydrate Detection Challenge**! This app helps lease operators quickly identify and predict hydrate formation 
