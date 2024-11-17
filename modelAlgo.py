@@ -67,7 +67,7 @@ def genXYSequences(filename):
     return [X_sequences, y_sequences]
 
 def train():
-    sequences = genXYSequences('Fearless_709H-10_31-11_07.csv')
+    sequences = genXYSequences('Resolute_728H-10_14-10_21.csv')
     X_sequences = sequences[0]
     y_sequences = sequences[1]
 
