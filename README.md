@@ -16,12 +16,10 @@ Real-time pipeline monitoring system using ML to predict and prevent hydrate for
 - **Backend**: Node.js, Express
 
 ## 📸 Screenshots
+<img width="868" height="851" alt="image" src="https://github.com/user-attachments/assets/a63ea13c-a208-4ead-8669-2951bb4743c7" />
+<img width="818" height="671" alt="image" src="https://github.com/user-attachments/assets/9d34f3d5-ad66-4352-81a1-1b2dd4cff190" />
 
-## 🏃‍♂️ Quick Start
-# Hydraguard Pipeline Monitor
-
-## How to Run the Streamlit App
-
+## 🏃‍♂️ How to Run
 ### 1. Clone the Repository
 ```powershell
 git clone https://github.com/PrabhasG550/hydraguard-pipeline-monitor.git
