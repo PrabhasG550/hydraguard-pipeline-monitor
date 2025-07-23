@@ -1,7 +1,5 @@
 # HydraGuard - Pipeline Monitoring System
 
-** HackUTD 2024 EOG Challenge Winner**
-
 ## Overview
 Real-time pipeline monitoring system using ML to predict and prevent hydrate formation, saving energy companies millions in prevention costs.
 
