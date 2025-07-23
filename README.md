@@ -18,6 +18,3 @@ Real-time pipeline monitoring system using ML to predict and prevent hydrate for
 ## 📸 Screenshots
 
 ## 🏃‍♂️ Quick Start
-```bash
-npm install
-npm run dev
